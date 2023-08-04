@@ -1,7 +1,7 @@
 name: Action1
 on: push
 jobs:
-  tests:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -16,6 +16,10 @@ jobs:
         run: npm test
       - name: Run Lint
         run: npm run lint
+  build-deploy:
+    needs: run-tests
+    runs-on: unbuntu-latest
+    steps:
       - name: Build file
         run: npm run build
       - name: Deploy
