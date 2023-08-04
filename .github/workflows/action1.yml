@@ -30,7 +30,7 @@ jobs:
       - name: Run Lint
         run: npm run lint
   build-deploy:
-    needs: [run-tests, run-lint]
+    needs: [run-test, run-lint]
     runs-on: ubuntu-latest
     steps:
       - name: Get code
