@@ -1,15 +1,16 @@
 name: Action1
 on: push
 jobs:
-  runs-on: ubuntu-latest
-    steps: 
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Install NodeJS
-        uses: actions/setup-node@v3
-          with:
-            node-version: 18
-      - name: Install Dependancies
-        run: npm ci
-      - name: Run Tests
-        run: npm test
+  tests:
+    runs-on: ubuntu-latest
+      steps: 
+        - name: Get code
+          uses: actions/checkout@v3
+        - name: Install NodeJS
+          uses: actions/setup-node@v3
+            with:
+              node-version: 18
+        - name: Install Dependancies
+          run: npm ci
+        - name: Run Tests
+          run: npm test
