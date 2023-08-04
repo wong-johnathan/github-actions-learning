@@ -1,7 +1,7 @@
 name: Action1
 on: push
 jobs:
-  run-tests:
+  run-test:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -16,8 +16,21 @@ jobs:
         run: npm test
       - name: Run Lint
         run: npm run lint
+  run-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Dependancies
+        run: npm ci
+      - name: Run Lint
+        run: npm run lint
   build-deploy:
-    needs: run-tests
+    needs: [run-tests, run-lint]
     runs-on: ubuntu-latest
     steps:
       - name: Get code
