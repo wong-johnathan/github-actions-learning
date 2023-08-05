@@ -6,6 +6,11 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Cache Dependancies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{hashFiles('**/packages-lock.json')}}
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
@@ -19,6 +24,11 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Cache Dependancies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{hashFiles('**/packages-lock.json')}}
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
@@ -27,12 +37,17 @@ jobs:
         run: npm ci
       - name: Run Lint
         run: npm run lint
-  build-deploy:
+  build:
     needs: [run-test, run-lint]
     runs-on: ubuntu-latest
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Cache Dependancies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{hashFiles('**/packages-lock.json')}}
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
@@ -41,5 +56,18 @@ jobs:
         run: npm ci
       - name: Build file
         run: npm run build
-      - name: Deploy
-        run: echo 'Deploying app...'
+      - name: Upload build
+        run: actions/upload-artifacts@v3
+        with:
+          name: dist-files
+          path: dist
+  upload:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract artifact
+        run: actions/download-artifacts@v3
+        with:
+          name: dist-files
+      - name: List file
+        run: ls
